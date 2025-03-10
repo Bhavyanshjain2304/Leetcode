@@ -1,45 +1,49 @@
 class Solution {
     public long countOfSubstrings(String word, int k) {
-        return substringsWithAtMost(word, k) - substringsWithAtMost(word, k - 1);
-    }
-    private long substringsWithAtMost(String word, int k) {
-        if (k == -1)
-            return 0;
+        int[][] frequencies = new int[2][128];
+        frequencies[0]['a'] = 1;
+        frequencies[0]['e'] = 1;
+        frequencies[0]['i'] = 1;
+        frequencies[0]['o'] = 1;
+        frequencies[0]['u'] = 1;
 
-        long res = 0;
-        int vowels = 0;
-        int uniqueVowels = 0;
-        Map<Character, Integer> vowelLastSeen = new HashMap<>();
+        long response = 0;
+        int currentK = 0, vowels = 0, extraLeft = 0;
 
-        for (int l = 0, r = 0; r < word.length(); ++r) {
-            if (isVowel(word.charAt(r))) {
-                ++vowels;
-                if (!vowelLastSeen.containsKey(word.charAt(r)) || vowelLastSeen.get(word.charAt(r)) < l)
-                    ++uniqueVowels;
-                vowelLastSeen.put(word.charAt(r), r);
+        for (int right = 0, left = 0; right < word.length(); right++) {
+            char rightChar = word.charAt(right);
+
+            if (frequencies[0][rightChar] == 1) {
+                if (++frequencies[1][rightChar] == 1)
+                    vowels++;
+            } else {
+                currentK++;
             }
-            while (r - l + 1 - vowels > k) {
-                if (isVowel(word.charAt(l))) {
-                    --vowels;
-                    if (vowelLastSeen.get(word.charAt(l)) == l)
-                        --uniqueVowels;
+
+            while (currentK > k) {
+                char leftChar = word.charAt(left);
+                if (frequencies[0][leftChar] == 1) {
+                    if (--frequencies[1][leftChar] == 0)
+                        vowels--;
+                } else {
+                    currentK--;
                 }
-                ++l;
+                left++;
+                extraLeft = 0;
             }
-            if (uniqueVowels == 5) {
-                final int minVowelLastSeen = Arrays.asList('a', 'e', 'i', 'o', 'u')
-                        .stream()
-                        .mapToInt(vowel -> vowelLastSeen.get(vowel))
-                        .min()
-                        .getAsInt();
-                res += minVowelLastSeen - l + 1;
+
+            while (vowels == 5 && currentK == k && left < right && frequencies[0][word.charAt(left)] == 1
+                    && frequencies[1][word.charAt(left)] > 1) {
+                extraLeft++;
+                frequencies[1][word.charAt(left)]--;
+                left++;
+            }
+
+            if (currentK == k && vowels == 5) {
+                response += (1 + extraLeft);
             }
         }
 
-        return res;
-    }
-
-    private boolean isVowel(char c) {
-        return "aeiou".indexOf(c) != -1;
+        return response;
     }
 }
