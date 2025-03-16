@@ -31,8 +31,7 @@ class Solution {
             carsRepaired += (long) (Math.sqrt((1.0*time) / rank));
             if(carsRepaired >= carsToBeRepaired) return true;
         }
-        if(carsRepaired >= carsToBeRepaired) return true;
-        else return false;
+        return false;
     }
 }
 
