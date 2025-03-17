@@ -7,7 +7,7 @@ class Solution {
         }
 
         for(int freq : mp.values()){
-            if(freq%2 != 0) return false;
+            if((freq&1) == 1) return false;
         }
         return true;
     }
