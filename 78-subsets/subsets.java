@@ -4,7 +4,6 @@ class Solution {
         generateSubsets(0, nums, new ArrayList<>(), subsets);
         return subsets;
     }
-
     public void generateSubsets(int index, int[]nums, List<Integer> current, List<List<Integer>> result){
         if(index == nums.length){
             result.add(new ArrayList<>(current));
