@@ -3,7 +3,6 @@ class Solution {
     final int maxNum = Arrays.stream(nums).max().getAsInt();
     long ans = 0;
     int count = 0;
-
     for (int l = 0, r = 0; r < nums.length; ++r) {
       if (nums[r] == maxNum)
         ++count;
