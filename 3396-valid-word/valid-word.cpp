@@ -17,8 +17,7 @@ public:
                 return false;
             }
         }
-        if(v>=1&&c>=1) return true;
-        else return false;
+        return (v>=1 && c>=1);
 
     }
 };
